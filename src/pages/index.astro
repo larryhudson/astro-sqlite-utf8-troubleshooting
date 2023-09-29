@@ -1,0 +1,48 @@
+---
+let input, result;
+
+import Database from "better-sqlite3";
+
+if (Astro.request.method === 'POST') {
+const db = new Database(':memory:');
+const stmt = db.prepare('CREATE TABLE test (input TEXT)');
+stmt.run();
+
+const formData = await Astro.request.formData();
+input = formData.get('input')
+
+const insertStmt = db.prepare('INSERT INTO test VALUES (?)');
+insertStmt.run(input);
+
+const selectStmt = db.prepare('SELECT * FROM test');
+result = selectStmt.get();
+}
+
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro</title>
+	</head>
+	<body>
+    <h1>Troubleshooting utf-8 issues with Astro, better-sqlite3, bullmq, @extractus/article-parser, cheerio</h1>
+    <p>You can <a href="https://github.com/larryhudson/astro-sqlite-tts-feed/issues/6">read more about the issue over on GitHub</a>.</p>
+
+    <form method="POST">
+      <label>Input a string</label>
+      <input type="text" name="input" />
+      <button>Submit</button>
+    </form>
+
+    <h2>Posted data</h2>
+    {input && <p>{input}</p>}
+
+    <h2>In SQLite database</h2>
+    <pre>{JSON.stringify(result, null,2)}</pre>
+
+	</body>
+</html>
