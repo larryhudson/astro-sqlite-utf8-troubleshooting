@@ -2,6 +2,10 @@
 
 This is a repo to troubleshoot an [issue you can read more about over here](https://github.com/larryhudson/astro-sqlite-tts-feed/issues/6).
 
+## Solution
+
+It looks like the issue was forgetting to add `<meta charset="utf-8">` to my HTML template in Astro. That's what I get for not including the regular boilerplate!
+
 ```sh
 npm create astro@latest -- --template minimal
 ```
